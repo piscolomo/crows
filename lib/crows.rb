@@ -12,11 +12,14 @@ module Crows
   end
 
   def crow(record)
-    crows[record] = find_crowclass(record).new(crow_user, record)
+    instance = find_crowclass(record).new(crow_user, record)
+    crows[record] = instance unless record.is_a? Class
+    instance
   end
 
   def crow_scope(klass)
-    crow(klass).resolve
+    crows_scope[klass] = crow(klass)
+    crows_scope[klass].resolve
   end
 
   def authorize(record, query)
@@ -33,6 +36,10 @@ module Crows
 
   def crows
     @crows ||= {}
+  end
+
+  def crows_scope
+    @crows_scope ||= {}
   end
 
   private

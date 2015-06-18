@@ -81,15 +81,15 @@ scope do
     end
   end
 
-  test "allow crow to be injected" do
-    crow = @controller.crow(@post)
-    @controller.crows[@post] = crow
-    assert_equal @controller.crows[@post], crow
-  end
-
   test "save the crow" do
     assert_equal @controller.crows[Post.new], nil
     crow = @controller.crow(@post)
+    assert_equal @controller.crows[@post], crow
+  end
+
+  test "allow crow to be injected" do
+    crow = @controller.crow(@post)
+    @controller.crows[@post] = crow
     assert_equal @controller.crows[@post], crow
   end
 
@@ -102,6 +102,17 @@ scope do
     assert_raise(Crows::NotDefinedError) do
       @controller.crow_scope(User)
     end
+  end
+
+  test "save the crow scope" do
+    scope = @controller.crow_scope(Post)
+    assert_equal @controller.crows_scope[Post].resolve, scope
+  end
+
+  test "allow crow scope to be injected" do
+    scope = @controller.crow_scope(Post)
+    @controller.crows_scope[Post] = scope
+    assert_equal @controller.crows_scope[Post], scope
   end
 
   test "crow_user return the same current_user of controller" do
