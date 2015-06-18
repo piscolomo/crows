@@ -12,7 +12,7 @@ module Crows
   end
 
   def crow(record)
-    find_crowclass(record).new(crow_user, record)
+    crows[record] = find_crowclass(record).new(crow_user, record)
   end
 
   def crow_scope(klass)
@@ -29,6 +29,10 @@ module Crows
 
   def crow_user
     current_user
+  end
+
+  def crows
+    @crows ||= {}
   end
 
   private

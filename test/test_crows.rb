@@ -81,6 +81,18 @@ scope do
     end
   end
 
+  test "allow crow to be injected" do
+    crow = @controller.crow(@post)
+    @controller.crows[@post] = crow
+    assert_equal @controller.crows[@post], crow
+  end
+
+  test "save the crow" do
+    assert_equal @controller.crows[Post.new], nil
+    crow = @controller.crow(@post)
+    assert_equal @controller.crows[@post], crow
+  end
+
   test "returns an instantiated crow scope" do
     scope = @controller.crow_scope(Post)
     assert_equal scope, ['post 1', 'post 2']
