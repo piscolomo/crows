@@ -11,14 +11,12 @@ module Crows
     end
   end
 
-  def find_crowclass(record)
-    klass = Object.const_get(record.class.to_s + SUFFIX)
-  rescue NameError
-    raise NotDefinedError, "unable to find crow #{klass} for #{record.inspect}"
-  end
-
   def crow(record)
     find_crowclass(record).new(current_user, record)
+  end
+
+  def crow_scope(klass)
+    crow(klass).resolve
   end
 
   def authorize(record, query)
@@ -27,5 +25,17 @@ module Crows
       raise NotAuthorizedError.new(query: query, record: record)
     end
     true
+  end
+
+  private
+
+  def find_crowclass(record)
+    klass = if record.is_a? Class
+      Object.const_get(record.to_s + SUFFIX)::Scope
+    else
+      Object.const_get(record.class.to_s + SUFFIX)
+    end
+  rescue NameError
+    raise NotDefinedError, "unable to find crow #{klass} for #{record.inspect}"
   end
 end

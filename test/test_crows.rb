@@ -3,7 +3,11 @@ require File.expand_path("../lib/crows", File.dirname(__FILE__))
 scope do
   class User; end
 
-  class Post; end
+  class Post
+    def self.all
+      ['post 1', 'post 2']
+    end
+  end
 
   class PostCrow
     attr_reader :user, :post
@@ -19,6 +23,21 @@ scope do
 
     def destroy?
       false
+    end
+
+    class Scope
+      attr_reader :user, :scope
+
+      def initialize(user, scope)
+        @user = user
+        @scope = scope
+      end
+
+      def resolve
+        if true
+          scope.all
+        end
+      end
     end
   end
 
@@ -59,6 +78,17 @@ scope do
   test "throws an exception when a crow class cannot be found in #crow" do
     assert_raise(Crows::NotDefinedError) do
       @controller.crow(@user)
+    end
+  end
+
+  test "returns an instantiated crow scope" do
+    scope = @controller.crow_scope(Post)
+    assert_equal scope, ['post 1', 'post 2']
+  end
+
+  test "throws an exception when a crow scope class cannot be found" do
+    assert_raise(Crows::NotDefinedError) do
+      @controller.crow_scope(User)
     end
   end
 end
