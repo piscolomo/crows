@@ -50,4 +50,15 @@ scope do
       @controller.authorize(@user, :update?)
     end
   end
+
+  test "returns an instantiated crow" do
+    crow = @controller.crow(@post)
+    assert_equal crow.post, @post
+  end
+
+  test "throws an exception when a crow class cannot be found in #crow" do
+    assert_raise(Crows::NotDefinedError) do
+      @controller.crow(@user)
+    end
+  end
 end

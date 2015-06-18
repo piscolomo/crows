@@ -11,15 +11,19 @@ module Crows
     end
   end
 
-  def find_crow_of(record)
+  def find_crowclass(record)
     klass = Object.const_get(record.class.to_s + SUFFIX)
   rescue NameError
     raise NotDefinedError, "unable to find crow #{klass} for #{record.inspect}"
   end
 
+  def crow(record)
+    find_crowclass(record).new(current_user, record)
+  end
+
   def authorize(record, query)
-    instance = find_crow_of(record).new(current_user, record)
-    unless instance.public_send(query)
+    crow = crow(record)
+    unless crow.public_send(query)
       raise NotAuthorizedError.new(query: query, record: record)
     end
     true
