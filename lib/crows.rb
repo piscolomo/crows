@@ -12,7 +12,7 @@ module Crows
   end
 
   def crow(record)
-    find_crowclass(record).new(current_user, record)
+    find_crowclass(record).new(crow_user, record)
   end
 
   def crow_scope(klass)
@@ -25,6 +25,10 @@ module Crows
       raise NotAuthorizedError.new(query: query, record: record)
     end
     true
+  end
+
+  def crow_user
+    current_user
   end
 
   private

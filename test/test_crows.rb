@@ -91,4 +91,8 @@ scope do
       @controller.crow_scope(User)
     end
   end
+
+  test "crow_user return the same current_user of controller" do
+    assert_equal @controller.crow_user, @controller.current_user
+  end
 end
