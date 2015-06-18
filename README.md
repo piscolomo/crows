@@ -2,7 +2,9 @@
 
 Inspired by [Pundit](https://github.com/elabs/pundit), Crows is a micro framework-agnostic library for authorization in Ruby classes.
 
-A set of crows to authorized your users, because the night is dark and full of terrors...
+A set of crows for authorize your users, because the night is dark and full of terrors...
+
+![Crows](https://s-media-cache-ak0.pinimg.com/736x/d5/b6/1e/d5b61ee4b6f7f390e467c64cfefe6993.jpg)
 
 Crows provide you with a few helpers to check if `current_user` can make operations into some records. This gives you the freedom to build your own plain Ruby classes to make authorization works easily, without the painful of bigs DSLs or something like that.
 
@@ -58,13 +60,13 @@ authorize @post, :destroy?
 
 The above line will check your PostCrow class to authorize if current user can destroy the @post
 
-Raising an exception if is not true the result of `destroy?`
+An exception is raised if is not true the result of `destroy?`
 
 ``` ruby
 Crows::NotAuthorizedError: not allowed to destroy? this #<Post:0x007fd1831adc48>
 ```
 
-Also, you have a method `crow` to receive the instance of your Crow class for handle the checks manually, useful in the views:
+Also, you have a method `crow` to receive the instance of your Crow class for handle the check manually, useful in the views:
 
 ``` erb
 <% if crow(@post).destroy? %>
@@ -100,7 +102,7 @@ end
 To make the Scope class works: 
 - You need to create it nested in your Crow class.
 - In its `initialize` the class Scope receive as first argument the `current_user`(similar as works the Crow classes) and as second argument the scope(a class name) that you'll pass later to the `authorize` method
-- And you need to declare the `resolve` method, which should check the authorization and return something that can be iterated(that's why is called scope, isn't it?)
+- And you need to declare the `resolve` method, which should check the authorization and return something that can be iterated(that is the reason why it is called scope, isn't it?)
 
 Now, you can use your scopes like this:
 
