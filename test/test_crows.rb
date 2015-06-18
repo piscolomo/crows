@@ -39,9 +39,15 @@ scope do
     assert_equal action, true
   end
 
-  test "throw an error if authorization fails" do
+  test "throw an exception if authorization fails" do
     assert_raise(Crows::NotAuthorizedError) do
       @controller.authorize(@post, :destroy?)
+    end
+  end
+
+  test "throws an exception when a crow class cannot be found" do
+    assert_raise(Crows::NotDefinedError) do
+      @controller.authorize(@user, :update?)
     end
   end
 end
